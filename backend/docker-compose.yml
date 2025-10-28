@@ -29,10 +29,6 @@ services:
       dockerfile: Dockerfile
     container_name: expensesense_backend
     restart: always
-    command: >
-      sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 expensesense_backend.wsgi:application"
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
@@ -44,6 +40,7 @@ services:
     environment:
       - DB_HOST=db
       - DB_PORT=3306
+      - CREATE_SUPERUSER=false
     depends_on:
       db:
         condition: service_healthy
